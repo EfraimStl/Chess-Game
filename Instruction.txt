@@ -1,0 +1,45 @@
+
+1. Class for each piece with its own movement options
+    example:
+    Class Pawn:
+        self.color
+        self.first_turn
+        def is_legal_move(from_square, to_square) -> bool
+
+2. Boards of buttons
+    first_button = None
+    second_button = None
+
+    function click sends its own coordinates
+        if first ==None:
+            first = coor
+        else:
+            second = coor
+            send the move to backend (result = board_logic.check_move(first, second)
+            check if result valid and call a function
+            first = None
+            second = None
+
+3. backend:
+
+   * check_move(first, second) - gets the move the player want to make and check if it's valid (more function for every type)
+                              return some strings that will make frontend to decide how to react
+
+       types of tests:
+            * Whose turn is it
+            * Call the is_valid_move of the specific piece (Does the piece follow its specific movement rules)
+            * Is the destination square occupied by a piece of the same color
+            * Does the piece have a clear path to the destination square
+            * Check if the piece can move or is it protecting king
+            * Is the move putting the king in check
+            * if there is check only a piece that can protect the king can move, otherwise it's checkmate
+            * Special moves (e.g., castling, en passant, promotion)
+            * Does the move Ends the game (e.g. checkmate, tie, stalemate)
+
+
+   * update_attribute - update all consequences of moving piece
+
+
+
+
+
