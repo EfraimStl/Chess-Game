@@ -92,6 +92,12 @@ class BoardGui:
             if result == "alright":
                 # Move the piece in the game logic
                 self.game_logic.move(self.first_click, self.second_click)
+                self.game_logic.is_check()
+
+                # change turns between black and white
+                self.game_logic.whose_turn()
+                self.game_logic.is_self_check(self.first_click, self.second_click)
+
                 # Update the GUI board
                 self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
 
