@@ -5,11 +5,16 @@ class Pawn:
     def __init__(self, color):
         self.color = color
         self.first_turn = True
+        self.potential_en_passant = None
 
     def is_legal_move(self, from_square, to_square, board):
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square
+
+            # if self.first_turn:
+            #     if abs(from_row - to_row) == 2:
+            #         self.potential_en_passant = to_square
 
             if is_eating(from_square, to_square, board):
                 if from_col == to_col:
@@ -17,7 +22,7 @@ class Pawn:
             else:
                 if from_col != to_col:
                     return False
-
+            # self.potential_en_passant = None
             if self.first_turn:
                 if self.color == "black":
                     if -2 <= from_row - to_row < 0:
@@ -32,6 +37,9 @@ class Pawn:
                 elif from_row - to_row == 1:
                     return True
         return False
+
+    def promoting(self):
+        pass
 
 
 class Rook:
@@ -98,9 +106,6 @@ class King:
             if abs(from_row - to_row) <= 1 and abs(from_col - to_col) <= 1:
                 return True
 
-            # not done the castling
-            elif self.first_turn and ((from_col - to_col == 3 and True) or (from_col - to_col == -2)):
-                return True
         return False
 
 

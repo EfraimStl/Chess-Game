@@ -19,6 +19,7 @@ class GameLogic:
              Knight("white"), Rook("white")]
         ]
         self.turn = "white"
+        self.potential_en_passant = None
 
     def check_move(self, first_click, second_click):
         from_row, from_col = first_click
@@ -47,23 +48,61 @@ class GameLogic:
             self.back_chess_board[from_row][from_col] = None
             self.back_chess_board[to_row][to_col] = piece
 
-    def backend_movement(self, from_square, to_square):
-        if not self.is_self_check(from_square, to_square):
-            self.move(from_square, to_square)
-            self.is_check()
-
-        # change turns between black and white
-        self.whose_turn()
-
-    def castling(self):
+    def castling(self, from_square, to_square):
         # If it's rook and king first turn, should be able to castle
-        pass
+        from_row, from_col = from_square
+        to_row, to_col = to_square
 
-    def en_passant(self):
-        pass
+        king = from_square
+        rook = None
+        move_rook = None
 
-    def promoting(self):
-        pass
+        temp_board = copy.deepcopy(self)
+        temp_board.whose_turn()
+
+        if isinstance(self.back_chess_board[from_row][from_col], King)\
+                and self.back_chess_board[from_row][from_col].first_turn\
+                and not temp_board.is_check():
+            # black castle
+            # short castle
+            if isinstance(self.back_chess_board[0][7], Rook) and to_square == (0, 6)\
+                    and self.back_chess_board[0][7].first_turn\
+                    and all(self.back_chess_board[0][col] is None for col in [5, 6])\
+                    and not any(self.is_self_check(king, (0, col)) for col in [5, 6]):
+                rook = (0, 7)
+                move_rook = (0, 5)
+                return True, rook, move_rook
+            # long castle
+            elif isinstance(self.back_chess_board[0][0], Rook) and to_square == (0, 2) \
+                    and self.back_chess_board[0][0].first_turn \
+                    and all(self.back_chess_board[0][col] is None for col in [2, 3])\
+                    and not any(self.is_self_check(king, (0, col)) for col in [2, 3]):
+
+                rook = (0, 0)
+                move_rook = (0, 3)
+                return True, rook, move_rook
+            # white castle
+            # long castle
+            elif isinstance(self.back_chess_board[7][0], Rook) and to_square == (7, 2) \
+                    and self.back_chess_board[7][0].first_turn\
+                    and all(self.back_chess_board[7][col] is None for col in [2, 3]) \
+                    and not any(self.is_self_check(king, (7, col)) for col in [2, 3]):
+
+                rook = (7, 0)
+                move_rook = (7, 3)
+                return True, rook, move_rook
+            # short castle
+            elif isinstance(self.back_chess_board[7][7], Rook) and to_square == (7, 6) \
+                    and  self.back_chess_board[7][7].first_turn\
+                    and all(self.back_chess_board[7][col] is None for col in [5, 6]) \
+                    and not any(self.is_self_check(king, (7, col)) for col in [5, 6]):
+
+                rook = (7, 7)
+                move_rook = (7, 5)
+                return True, rook, move_rook
+
+        del temp_board
+        return False, rook, move_rook
 
     def whose_turn(self):
         self.turn = "black" if self.turn == "white" else "white"
@@ -104,8 +143,9 @@ class GameLogic:
         temp_game.whose_turn()
         return temp_game.is_check()
 
-    def is_checkmate(self):
-        # If is_check, function should check if there is a way to block it (by moving the king or other piece)
+    def is_checkmate_or_stalemate(self):
+        # Checks if there is a valid move, on there is no legal move the method checks if it is a check.
+        # If there is a check this is a checkmate, else this is a stalemate.
         for row in range(8):
             for col in range(8):
                 piece_position = (row, col)
@@ -114,15 +154,19 @@ class GameLogic:
                         destination = (row_2, col_2)
                         if self.check_move(piece_position, destination):
                             if self.is_self_check(piece_position, destination) is False:
-
                                 print(f"not checkmate {piece_position}{destination}")
                                 return False
-        print("checkmate")
-        return True
+        # if no valid move founds, check if it is a checkmate or a stalemate
+        copy_for_test = copy.deepcopy(self)
+        copy_for_test.whose_turn()
+        if not copy_for_test.is_check():
+            print("stalemate")
+            del copy_for_test
+            return True, "stalemate"
 
+        del copy_for_test
+        print("checkmate")
+        return True, "checkmate"
 
     def is_tie(self):
-        pass
-
-    def is_stalemate(self):
         pass
