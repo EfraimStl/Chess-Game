@@ -1,4 +1,3 @@
-
 def is_occupied_by_same_color(from_square, to_square, board):
     # Implement checks for whether the destination square is occupied by a piece of the same color
     if from_square is not None and to_square is not None:
@@ -47,13 +46,6 @@ def is_eating(from_square, to_square, board):
         if board[to_row][to_col] is not None:
             if board[to_row][to_col].color != board[from_row][from_col]:
                 return True
-        # else:
-        #     if from_col != to_col\
-        #         and board[from_row][to_col] is not None\
-        #         and isinstance(board[from_row][to_col], Pawn)\
-        #         and board[from_row][to_col].potential_en_passant == to_square:
-        #         print("potential en passant")
-        #         return True
     return False
 
 

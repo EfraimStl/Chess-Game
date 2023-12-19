@@ -1,12 +1,14 @@
-import functools
 from tkinter import *
 
 
 class BoardGui:
     def __init__(self, game_logic):
         self.root = Tk()
-        self.root.configure(bg="green", pady=20, padx=50)
+        self.root.configure(bg="#444941", pady=20, padx=50)
         self.root.title("Chess")
+
+        self.screen_width = self.root.winfo_screenwidth()
+        self.screen_height = self.root.winfo_screenheight()
 
         self.first_click = None
         self.second_click = None
@@ -29,6 +31,8 @@ class BoardGui:
 
         self.empty_image = PhotoImage(file="images/transparent.png")
 
+        self.promote_select = None
+
         self.button_matrix = [[None for _ in range(8)] for _ in range(8)]
 
         self.board_setup()
@@ -50,7 +54,7 @@ class BoardGui:
         for row in range(8):
             for col in range(8):
                 # Alternate colors
-                fill_color = "#F5F5DC" if (row + col) % 2 == 0 else "black"
+                fill_color = "#D5EEBB" if (row + col) % 2 == 0 else "#5F7A61"
                 piece_code = chessboard[row][col]
                 image = getattr(self, f"{piece_code}_image", self.empty_image)
 
@@ -70,17 +74,29 @@ class BoardGui:
                 square_button.grid(row=row, column=col)
 
     def update_board(self, from_row, from_col, to_row, to_col):
-        # Move the piece in the chessboard representation
-        # piece_code = chessboard[from_row][from_col]
-        # chessboard[from_row][from_col] = ""
-        # chessboard[to_row][to_col] = piece_code
-
-        # Update the images on the buttons
         from_button = self.button_matrix[from_row][from_col]
         to_button = self.button_matrix[to_row][to_col]
 
         to_button.configure(image=from_button.cget("image"))
         from_button.configure(image=self.empty_image)
+
+    # def continue_after_destroy(self):
+    #     print(self.promote_select)
+    def board_promote(self):
+        window = Tk()
+        var = StringVar(window, "Queen")
+        values = ["Queen", "Rook", "Bishop", "Knight"]
+
+        def set_result(value):
+            self.promote_select = value
+            window.destroy()
+            # self.continue_after_destroy()
+
+        for value in values:
+            Radiobutton(window, text=value, variable=var, value=value, indicatoron=False, bg="#7FC8A9") \
+                .pack(fill=X, ipady=5)
+        Button(window, text="Submit", command=lambda: set_result(var.get())).pack(fill=X, ipady=7)
+        window.mainloop()
 
     def on_square_click(self, row, col):
 
@@ -111,6 +127,7 @@ class BoardGui:
 
                     # check if checkmate or stalemate
                     self.game_logic.is_checkmate_or_stalemate()
+
 
                     # Update the GUI board
                     self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])

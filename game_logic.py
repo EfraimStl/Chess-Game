@@ -168,5 +168,12 @@ class GameLogic:
         print("checkmate")
         return True, "checkmate"
 
+    def promoting(self, from_square, to_square):
+        from_row, from_col = from_square
+        to_row, to_col = to_square
+        promote_row = 8 if self.turn == "white" else 0
+
+        if isinstance(self.back_chess_board[from_row][from_col], Pawn) and to_row == promote_row:
+            pass
     def is_tie(self):
         pass

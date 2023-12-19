@@ -12,10 +12,6 @@ class Pawn:
             from_row, from_col = from_square
             to_row, to_col = to_square
 
-            # if self.first_turn:
-            #     if abs(from_row - to_row) == 2:
-            #         self.potential_en_passant = to_square
-
             if is_eating(from_square, to_square, board):
                 if from_col == to_col:
                     return False
