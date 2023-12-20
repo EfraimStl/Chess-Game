@@ -1,14 +1,22 @@
 from tkinter import *
+import pygame
 
 
 class BoardGui:
     def __init__(self, game_logic):
         self.root = Tk()
-        self.root.configure(bg="#444941", pady=20, padx=50)
+        self.root.configure(bg="#444941", pady=10, padx=50)
         self.root.title("Chess")
+        self.root.resizable(width=False, height=False)
 
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
+        # Get the screen width and height
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        window_width = (screen_width - self.root.winfo_reqwidth())
+
+        # Set the window size to match the screen size
+        self.root.geometry(f"+{window_width // 4}+{0}")
 
         self.first_click = None
         self.second_click = None
@@ -66,6 +74,7 @@ class BoardGui:
                     width=button_size,
                     height=button_size,
                     bg=fill_color,
+                    activebackground="#444941",
                     compound="center",
                     command=lambda r=row, c=col: self.on_square_click(r, c)
                 )
@@ -80,17 +89,14 @@ class BoardGui:
         to_button.configure(image=from_button.cget("image"))
         from_button.configure(image=self.empty_image)
 
-    # def continue_after_destroy(self):
-    #     print(self.promote_select)
     def board_promote(self):
-        window = Tk()
+        window = Toplevel(self.root)
         var = StringVar(window, "Queen")
         values = ["Queen", "Rook", "Bishop", "Knight"]
 
         def set_result(value):
             self.promote_select = value
             window.destroy()
-            # self.continue_after_destroy()
 
         for value in values:
             Radiobutton(window, text=value, variable=var, value=value, indicatoron=False, bg="#7FC8A9") \
@@ -99,7 +105,7 @@ class BoardGui:
         window.mainloop()
 
     def on_square_click(self, row, col):
-
+        import game_over
         if self.first_click is None and self.game_logic.back_chess_board[row][col] is not None:
             self.first_click = (row, col)
         elif self.first_click is not None:
@@ -112,6 +118,7 @@ class BoardGui:
                 self.game_logic.move(self.first_click, self.second_click)
                 self.game_logic.move(rook, move_rook)
                 self.game_logic.whose_turn()
+                self.play_sound()
                 self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
                 self.update_board(rook[0], rook[1], move_rook[0], move_rook[1])
 
@@ -121,17 +128,30 @@ class BoardGui:
                 if not self.game_logic.is_self_check(self.first_click, self.second_click):
 
                     self.game_logic.move(self.first_click, self.second_click)
+                    self.play_sound()
 
                     # switch turn between players
                     self.game_logic.whose_turn()
 
                     # check if checkmate or stalemate
-                    self.game_logic.is_checkmate_or_stalemate()
+                    checkmate = self.game_logic.is_checkmate_or_stalemate()
 
 
                     # Update the GUI board
                     self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
+
+                    if checkmate:
+                        color = checkmate[1]
+                        self.root.destroy()
+                        game_over.GameOver(color)
+
             self.first_click = None
             self.second_click = None
 
         print(f"Square clicked: Row {row}, Column {col}")
+
+    @staticmethod
+    def play_sound():
+        pygame.mixer.init()
+        pygame.mixer.music.load("./images/sound.wav")
+        pygame.mixer.music.play()

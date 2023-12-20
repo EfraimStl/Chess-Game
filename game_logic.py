@@ -164,9 +164,8 @@ class GameLogic:
             del copy_for_test
             return True, "stalemate"
 
-        del copy_for_test
         print("checkmate")
-        return True, "checkmate"
+        return True, copy_for_test.turn
 
     def promoting(self, from_square, to_square):
         from_row, from_col = from_square
