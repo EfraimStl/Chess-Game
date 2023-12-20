@@ -41,8 +41,10 @@ class GameLogic:
             piece = self.back_chess_board[from_row][from_col]
 
             # if object has attribute of first turn (pawn, king, rook) make it false
-            if hasattr(piece, 'first_turn'):
+            if hasattr(piece, 'first_turn') and piece.first_turn:
                 piece.first_turn = False
+                if isinstance(self.back_chess_board[from_row][from_col], Pawn) and abs(from_row - to_row) == 2:
+                    self.potential_en_passant = to_square
 
             # move object from source square to destination
             self.back_chess_board[from_row][from_col] = None
@@ -161,7 +163,6 @@ class GameLogic:
         copy_for_test.whose_turn()
         if not copy_for_test.is_check():
             print("stalemate")
-            del copy_for_test
             return True, "stalemate"
 
         print("checkmate")
@@ -174,5 +175,25 @@ class GameLogic:
 
         if isinstance(self.back_chess_board[from_row][from_col], Pawn) and to_row == promote_row:
             pass
+
+    def en_passant(self, from_square, to_square):
+        from pieces import Pawn
+        if from_square is not None and to_square is not None:
+            from_row, from_col = from_square
+            to_row, to_col = to_square
+
+            if isinstance(self.back_chess_board[from_row][from_col], Pawn) and self.potential_en_passant is not None \
+                    and abs(from_col - self.potential_en_passant[1]) == 1 and to_col == self.potential_en_passant[1]:
+                if self.back_chess_board[from_row][from_col].color == "black" and from_row == 4:
+                    self.potential_en_passant = None
+                    self.back_chess_board[from_row][to_col] = None
+                    return True
+                elif self.back_chess_board[from_row][from_col].color == "white" and from_row == 3:
+                    self.potential_en_passant = None
+                    self.back_chess_board[from_row][to_col] = None
+                    return True
+        return False
+
     def is_tie(self):
-        pass
+        count = 0
+

@@ -112,6 +112,16 @@ class BoardGui:
             self.second_click = (row, col)
 
             castling, rook, move_rook = self.game_logic.castling(self.first_click, self.second_click)
+            en_passant = self.game_logic.en_passant(self.first_click, self.second_click)
+
+            if en_passant:
+                print("en passant")
+                self.game_logic.move(self.first_click, self.second_click)
+                self.game_logic.whose_turn()
+                self.play_sound()
+                self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
+                self.button_matrix[self.first_click[0]][self.second_click[1]].configure(image=self.empty_image)
+
 
             if castling:
                 print("castle")
@@ -140,8 +150,12 @@ class BoardGui:
                     # Update the GUI board
                     self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
 
-                    if checkmate:
+                    if checkmate and checkmate[1] != "stalemate":
                         color = checkmate[1]
+                        self.root.destroy()
+                        game_over.GameOver(color)
+                    elif checkmate:
+                        color = "stalemate"
                         self.root.destroy()
                         game_over.GameOver(color)
 

@@ -47,18 +47,3 @@ def is_eating(from_square, to_square, board):
             if board[to_row][to_col].color != board[from_row][from_col]:
                 return True
     return False
-
-
-def en_passant(self, from_square, to_square, board):
-    from pieces import Pawn
-    if from_square is not None and to_square is not None:
-        from_row, from_col = from_square
-        to_row, to_col = to_square
-
-        if isinstance(board[from_row][from_col], Pawn) and self.potential_en_passant is not None\
-                and abs(from_col - self.potential_en_passant[1]) == 1:
-            if board[from_row][from_col].color == "black" and from_row == 4:
-                return True
-            elif board[from_row][from_col].color == "white" and from_row == 3:
-                return True
-    return False
