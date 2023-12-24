@@ -5,10 +5,12 @@ FONT = ("Arial", 70, "bold")
 
 
 class GameOver:
-    """
-    Class for the windows that opens when game is over.
-    """
     def __init__(self, color):
+        """
+        Class for the windows that opens when game is over.
+        Args:
+            color - a string
+        """
         self.color = color
         self.window = Tk()
         self.window.title("Game Over")
@@ -43,6 +45,8 @@ class GameOver:
     def stalemate(self, color):
         """
         If game ended as a stalemate there are different labels.
+        Args:
+            color - a string
         """
         if color == "stalemate":
             return True

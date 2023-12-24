@@ -3,10 +3,12 @@ import pygame
 
 
 class BoardGui:
-    """
-    Class for the chess board GUI
-    """
     def __init__(self, game_logic):
+        """
+        Class for the chess board GUI
+        Args:
+            game_logic - a GameLogic object
+        """
         self.root = Tk()
         self.root.configure(bg="#444941", pady=10, padx=50)
         self.root.title("Chess")
@@ -93,6 +95,11 @@ class BoardGui:
         """
         Updates the image of the buttons
         source button's image becomes empty and destination becomes the source image
+        Args:
+            from_row - an int
+            from_col - an int
+            to_row - an int
+            to_col - an int
         """
         from_button = self.button_matrix[from_row][from_col]
         to_button = self.button_matrix[to_row][to_col]
@@ -121,6 +128,9 @@ class BoardGui:
     def on_square_click(self, row, col):
         """
         Sends the source and destination clicks to the backends and gets back a move to make in the GUI
+        Args:
+            row - an int
+            col - an int
         """
         if self.first_click is None and self.game_logic.back_chess_board[row][col] is not None:
             self.first_click = (row, col)

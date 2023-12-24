@@ -5,10 +5,10 @@ from util import is_occupied_by_same_color, is_path_clear
 
 
 class GameLogic:
-    """
-    Class for the logic of the game
-    """
     def __init__(self):
+        """
+        Class for the logic of the game
+        """
         self.back_chess_board = [
             [Rook("black"), Knight("black"), Bishop("black"), Queen("black"), King("black"), Bishop("black"),
              Knight("black"), Rook("black")],
@@ -27,6 +27,9 @@ class GameLogic:
     def check_move(self, first_click, second_click):
         """
         Checks if move from source to destination is a valid move
+        Args:
+            first_click - a tuple
+            second_click - a tuple
         """
         from_row, from_col = first_click
         # to_row, to_col = second_click
@@ -43,6 +46,9 @@ class GameLogic:
     def move(self, from_square, to_square):
         """
         Makes the move of the object from source to destination
+        Args:
+            from_square - a tuple
+            to_square - a tuple
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -62,6 +68,9 @@ class GameLogic:
     def castling(self, from_square, to_square):
         """
         If it's rook's and king's first turn, should be able to castle
+        Args:
+            from_square - a tuple
+            to_square - a tuple
         """
         from_row, from_col = from_square
         to_row, to_col = to_square
@@ -188,6 +197,9 @@ class GameLogic:
     def promoting(self, from_square, to_square):
         """
         Promote the pawn if it gets to the last row
+        Args:
+            from_square - a tuple
+            to_square - a tuple
         """
         from_row, from_col = from_square
         to_row, to_col = to_square
@@ -199,6 +211,9 @@ class GameLogic:
     def en_passant(self, from_square, to_square):
         """
         Checks if there is a legal en passant move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
         """
         from pieces import Pawn
         if from_square is not None and to_square is not None:

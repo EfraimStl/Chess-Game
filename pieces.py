@@ -2,10 +2,12 @@ from util import is_eating
 
 
 class Pawn:
-    """
-    Class for pawn pieces
-    """
     def __init__(self, color):
+        """
+        Class for pawn pieces
+        Args:
+            color - a string
+        """
         self.color = color
         self.first_turn = True
         self.potential_en_passant = None
@@ -13,6 +15,10 @@ class Pawn:
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal pawn move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -42,16 +48,22 @@ class Pawn:
 
 
 class Rook:
-    """
-    Class for rook pieces
-    """
     def __init__(self, color):
+        """
+        Class for rook pieces
+        Args:
+            color - a string
+        """
         self.color = color
         self.first_turn = True
 
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal rook move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -63,15 +75,21 @@ class Rook:
 
 
 class Bishop:
-    """
-    Class for bishop pieces
-    """
     def __init__(self, color):
+        """
+        Class for bishop pieces
+        Args:
+            color - a string
+        """
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal bishop move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         if from_square is not None and to_square is not None:
             form_row, from_col = from_square
@@ -83,15 +101,21 @@ class Bishop:
 
 
 class Knight:
-    """
-    Class for knight pieces
-    """
     def __init__(self, color):
+        """
+        Class for knight pieces
+        Args:
+            color - a string
+        """
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal knight move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -103,31 +127,43 @@ class Knight:
 
 
 class Queen:
-    """
-    Class for queen pieces
-    """
     def __init__(self, color):
+        """
+        Class for queen pieces
+        Args:
+            color - a string
+        """
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal queen move
         (due to is_path_clear in util it cna always return True)
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         return True
 
 
 class King:
-    """
-    Class for king pieces
-    """
     def __init__(self, color):
+        """
+        Class for king pieces
+        Args:
+            color - a string
+        """
         self.color = color
         self.first_turn = True
 
     def is_legal_move(self, from_square, to_square, board):
         """
         Checks if move is a legal king move
+        Args:
+            from_square - a tuple
+            to_square - a tuple
+            board - two-dimensional list
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
