@@ -1,4 +1,7 @@
 def main():
+    """
+    Main function to run the game
+    """
     import board_gui
     import game_logic
     game_logic = game_logic.GameLogic()

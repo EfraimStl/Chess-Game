@@ -5,6 +5,9 @@ FONT = ("Arial", 70, "bold")
 
 
 class GameOver:
+    """
+    Class for the windows that opens when game is over.
+    """
     def __init__(self, color):
         self.color = color
         self.window = Tk()
@@ -35,15 +38,20 @@ class GameOver:
             self.player_win_label = Label(text="player win", foreground="#5F7A61", background="#D5EEBB", font=FONT)
             self.player_win_label.grid(column=0, row=2, padx=80)
 
-
         self.window.mainloop()
 
     def stalemate(self, color):
+        """
+        If game ended as a stalemate there are different labels.
+        """
         if color == "stalemate":
             return True
         return False
 
     def start_again(self):
+        """
+        For the start again button, calls the main function to start the game.
+        """
         self.window.destroy()
         main()
 

@@ -5,6 +5,9 @@ from util import is_occupied_by_same_color, is_path_clear
 
 
 class GameLogic:
+    """
+    Class for the logic of the game
+    """
     def __init__(self):
         self.back_chess_board = [
             [Rook("black"), Knight("black"), Bishop("black"), Queen("black"), King("black"), Bishop("black"),
@@ -22,6 +25,9 @@ class GameLogic:
         self.potential_en_passant = None
 
     def check_move(self, first_click, second_click):
+        """
+        Checks if move from source to destination is a valid move
+        """
         from_row, from_col = first_click
         # to_row, to_col = second_click
         if hasattr(self.back_chess_board[from_row][from_col], "color") and self.back_chess_board[from_row][
@@ -35,6 +41,9 @@ class GameLogic:
         return False
 
     def move(self, from_square, to_square):
+        """
+        Makes the move of the object from source to destination
+        """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square
@@ -51,7 +60,9 @@ class GameLogic:
             self.back_chess_board[to_row][to_col] = piece
 
     def castling(self, from_square, to_square):
-        # If it's rook and king first turn, should be able to castle
+        """
+        If it's rook's and king's first turn, should be able to castle
+        """
         from_row, from_col = from_square
         to_row, to_col = to_square
 
@@ -107,9 +118,15 @@ class GameLogic:
         return False, rook, move_rook
 
     def whose_turn(self):
+        """
+        Switch turns between black and white
+        """
         self.turn = "black" if self.turn == "white" else "white"
 
     def kings_position(self):
+        """
+        Track the kings position
+        """
         opponent_king_position = None
         self_king_position = None
 
@@ -118,36 +135,37 @@ class GameLogic:
                 if type(self.back_chess_board[row][col]) == King:
                     if self.back_chess_board[row][col].color != self.turn:
                         opponent_king_position = (row, col)
-                        print(f"{self.back_chess_board[row][col].color} king position is {opponent_king_position}")
                     else:
                         self_king_position = (row, col)
-                        print(f"{self.back_chess_board[row][col].color} king position is {self_king_position}")
 
         return self_king_position, opponent_king_position
 
     def is_check(self):
-        # should check if there is a clear path to the opponent's king
+        """
+        Checks if there is a clear path to the opponent's king
+        """
         opponent_king_position = self.kings_position()[1]
-        print(opponent_king_position)
 
         # Checking if opponent's king is threatened
         for row in range(8):
             for col in range(8):
                 if self.check_move((row, col), opponent_king_position):
-                    print("check")
                     return True
-
         return False
 
     def is_self_check(self, from_square, to_square):
+        """
+        Checks if a move will block or prevent the check on the player's king
+        """
         temp_game = copy.deepcopy(self)
         temp_game.move(from_square, to_square)
         temp_game.whose_turn()
         return temp_game.is_check()
 
     def is_checkmate_or_stalemate(self):
-        # Checks if there is a valid move, on there is no legal move the method checks if it is a check.
-        # If there is a check this is a checkmate, else this is a stalemate.
+        """
+        If there is no valid move the method checks if there is a checkmate or a stalemate
+        """
         for row in range(8):
             for col in range(8):
                 piece_position = (row, col)
@@ -156,7 +174,6 @@ class GameLogic:
                         destination = (row_2, col_2)
                         if self.check_move(piece_position, destination):
                             if self.is_self_check(piece_position, destination) is False:
-                                print(f"not checkmate {piece_position}{destination}")
                                 return False
         # if no valid move founds, check if it is a checkmate or a stalemate
         copy_for_test = copy.deepcopy(self)
@@ -169,6 +186,9 @@ class GameLogic:
         return True, copy_for_test.turn
 
     def promoting(self, from_square, to_square):
+        """
+        Promote the pawn if it gets to the last row
+        """
         from_row, from_col = from_square
         to_row, to_col = to_square
         promote_row = 8 if self.turn == "white" else 0
@@ -177,6 +197,9 @@ class GameLogic:
             pass
 
     def en_passant(self, from_square, to_square):
+        """
+        Checks if there is a legal en passant move
+        """
         from pieces import Pawn
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -184,16 +207,16 @@ class GameLogic:
 
             if isinstance(self.back_chess_board[from_row][from_col], Pawn) and self.potential_en_passant is not None \
                     and abs(from_col - self.potential_en_passant[1]) == 1 and to_col == self.potential_en_passant[1]:
-                if self.back_chess_board[from_row][from_col].color == "black" and from_row == 4:
-                    self.potential_en_passant = None
-                    self.back_chess_board[from_row][to_col] = None
-                    return True
-                elif self.back_chess_board[from_row][from_col].color == "white" and from_row == 3:
+                if (self.back_chess_board[from_row][from_col].color == "black" and from_row == 4)\
+                        or (self.back_chess_board[from_row][from_col].color == "white" and from_row == 3):
                     self.potential_en_passant = None
                     self.back_chess_board[from_row][to_col] = None
                     return True
         return False
 
     def is_tie(self):
+        """
+        Checks of there is a tie
+        """
         count = 0
 

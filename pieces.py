@@ -2,12 +2,18 @@ from util import is_eating
 
 
 class Pawn:
+    """
+    Class for pawn pieces
+    """
     def __init__(self, color):
         self.color = color
         self.first_turn = True
         self.potential_en_passant = None
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal pawn move
+        """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square
@@ -34,16 +40,19 @@ class Pawn:
                     return True
         return False
 
-    def promoting(self):
-        pass
-
 
 class Rook:
+    """
+    Class for rook pieces
+    """
     def __init__(self, color):
         self.color = color
         self.first_turn = True
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal rook move
+        """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square
@@ -54,10 +63,16 @@ class Rook:
 
 
 class Bishop:
+    """
+    Class for bishop pieces
+    """
     def __init__(self, color):
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal bishop move
+        """
         if from_square is not None and to_square is not None:
             form_row, from_col = from_square
             to_row, to_col = to_square
@@ -68,10 +83,16 @@ class Bishop:
 
 
 class Knight:
+    """
+    Class for knight pieces
+    """
     def __init__(self, color):
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal knight move
+        """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square
@@ -82,19 +103,32 @@ class Knight:
 
 
 class Queen:
+    """
+    Class for queen pieces
+    """
     def __init__(self, color):
         self.color = color
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal queen move
+        (due to is_path_clear in util it cna always return True)
+        """
         return True
 
 
 class King:
+    """
+    Class for king pieces
+    """
     def __init__(self, color):
         self.color = color
         self.first_turn = True
 
     def is_legal_move(self, from_square, to_square, board):
+        """
+        Checks if move is a legal king move
+        """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
             to_row, to_col = to_square

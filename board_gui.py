@@ -3,6 +3,9 @@ import pygame
 
 
 class BoardGui:
+    """
+    Class for the chess board GUI
+    """
     def __init__(self, game_logic):
         self.root = Tk()
         self.root.configure(bg="#444941", pady=10, padx=50)
@@ -46,6 +49,10 @@ class BoardGui:
         self.board_setup()
 
     def board_setup(self):
+        """
+        Setting up the board as it should be in the beginning of the game.
+        Board is made of 64 buttons that are used as a slots
+        """
 
         button_size = 70
         chessboard = [
@@ -83,13 +90,20 @@ class BoardGui:
                 square_button.grid(row=row, column=col)
 
     def update_board(self, from_row, from_col, to_row, to_col):
+        """
+        Updates the image of the buttons
+        source button's image becomes empty and destination becomes the source image
+        """
         from_button = self.button_matrix[from_row][from_col]
         to_button = self.button_matrix[to_row][to_col]
 
-        to_button.configure(image=from_button.cget("image"))
-        from_button.configure(image=self.empty_image)
+        to_button.config(image=from_button.cget("image"))
+        from_button.config(image=self.empty_image)
 
     def board_promote(self):
+        """
+        Promote solider that came to last row
+        """
         window = Toplevel(self.root)
         var = StringVar(window, "Queen")
         values = ["Queen", "Rook", "Bishop", "Knight"]
@@ -105,7 +119,9 @@ class BoardGui:
         window.mainloop()
 
     def on_square_click(self, row, col):
-        import game_over
+        """
+        Sends the source and destination clicks to the backends and gets back a move to make in the GUI
+        """
         if self.first_click is None and self.game_logic.back_chess_board[row][col] is not None:
             self.first_click = (row, col)
         elif self.first_click is not None:
@@ -115,57 +131,50 @@ class BoardGui:
             en_passant = self.game_logic.en_passant(self.first_click, self.second_click)
 
             if en_passant:
-                print("en passant")
-                self.game_logic.move(self.first_click, self.second_click)
-                self.game_logic.whose_turn()
-                self.play_sound()
-                self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
-                self.button_matrix[self.first_click[0]][self.second_click[1]].configure(image=self.empty_image)
+                self.make_a_move()
+                self.button_matrix[self.first_click[0]][self.second_click[1]].config(image=self.empty_image)
 
-
-            if castling:
-                print("castle")
-                self.game_logic.move(self.first_click, self.second_click)
+            elif castling:
                 self.game_logic.move(rook, move_rook)
-                self.game_logic.whose_turn()
-                self.play_sound()
-                self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
+                self.make_a_move()
+
                 self.update_board(rook[0], rook[1], move_rook[0], move_rook[1])
 
-
-            if self.game_logic.check_move(self.first_click, self.second_click):
+            elif self.game_logic.check_move(self.first_click, self.second_click):
                 # Move the piece in the game logic if it doesn't cause a check
                 if not self.game_logic.is_self_check(self.first_click, self.second_click):
-
-                    self.game_logic.move(self.first_click, self.second_click)
-                    self.play_sound()
-
-                    # switch turn between players
-                    self.game_logic.whose_turn()
-
-                    # check if checkmate or stalemate
-                    checkmate = self.game_logic.is_checkmate_or_stalemate()
-
-
-                    # Update the GUI board
-                    self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
-
-                    if checkmate and checkmate[1] != "stalemate":
-                        color = checkmate[1]
-                        self.root.destroy()
-                        game_over.GameOver(color)
-                    elif checkmate:
-                        color = "stalemate"
-                        self.root.destroy()
-                        game_over.GameOver(color)
+                    self.make_a_move()
 
             self.first_click = None
             self.second_click = None
 
-        print(f"Square clicked: Row {row}, Column {col}")
+    def make_a_move(self):
+        """
+        The move itself of the GUI and the backend
+        """
+        import game_over
+        self.game_logic.move(self.first_click, self.second_click)
+        self.game_logic.whose_turn()
+        # check if checkmate or stalemate
+        checkmate = self.game_logic.is_checkmate_or_stalemate()
+        # Update GUI board
+        self.update_board(self.first_click[0], self.first_click[1], self.second_click[0], self.second_click[1])
+        self.play_sound()
+
+        if checkmate and checkmate[1] != "stalemate":
+            color = checkmate[1]
+            self.root.destroy()
+            game_over.GameOver(color)
+        elif checkmate:
+            color = "stalemate"
+            self.root.destroy()
+            game_over.GameOver(color)
 
     @staticmethod
     def play_sound():
+        """
+        Play sound every move
+        """
         pygame.mixer.init()
         pygame.mixer.music.load("./images/sound.wav")
         pygame.mixer.music.play()
