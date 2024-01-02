@@ -25,10 +25,12 @@ class GameOver:
         # Set the window size to match the screen size
         self.window.geometry(f"700x700+{window_width // 4}+{0}")
 
-        self.game_over_label = Label(text=f"Game Over", foreground="#5F7A61", background="#D5EEBB", font=("Arial", 50, "bold"))
+        self.game_over_label = Label(text=f"Game Over", foreground="#5F7A61", background="#D5EEBB",
+                                     font=("Arial", 50, "bold"))
         self.game_over_label.grid(column=0, row=0, pady=30)
 
-        self.button = Button(text="Play Again", background="#5F7A61", command=self.start_again, font=("Arial", 30, "bold"), bd=5)
+        self.button = Button(text="Play Again", background="#5F7A61", command=self.start_again,
+                             font=("Arial", 30, "bold"), bd=5)
         self.button.grid(column=0, row=3, pady=60)
 
         if self.stalemate(self.color):
@@ -58,4 +60,3 @@ class GameOver:
         """
         self.window.destroy()
         main()
-
