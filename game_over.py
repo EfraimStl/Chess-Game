@@ -49,6 +49,8 @@ class GameOver:
         If game ended as a stalemate there are different labels.
         Args:
             color - a string
+        Returns:
+            bool: True if game ended in a stalemate
         """
         if color == "stalemate":
             return True

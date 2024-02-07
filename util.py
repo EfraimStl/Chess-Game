@@ -5,6 +5,8 @@ def is_occupied_by_same_color(from_square, to_square, board):
         from_square - a tuple
         to_square - a tuple
         board - two-dimensional list
+    Returns:
+        bool: True if the destination is occupied
     """
     if from_square is not None and to_square is not None:
         from_row, from_col = from_square
@@ -22,6 +24,8 @@ def is_path_clear(from_square, to_square, board):
         from_square - a tuple
         to_square - a tuple
         board - two-dimensional list
+    Returns:
+        bool: True if path is clear
     """
     from pieces import Knight
     if from_square is not None and to_square is not None:
@@ -57,11 +61,13 @@ def is_eating(from_square, to_square, board):
         from_square - a tuple
         to_square - a tuple
         board - two-dimensional list
+    Returns:
+        bool: True if the move is an eating move
     """
     if from_square is not None and to_square is not None:
         from_row, from_col = from_square
         to_row, to_col = to_square
         if board[to_row][to_col] is not None:
-            if board[to_row][to_col].color != board[from_row][from_col]:
+            if board[to_row][to_col].color != board[from_row][from_col].color:
                 return True
     return False

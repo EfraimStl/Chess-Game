@@ -10,8 +10,8 @@
     first_button = None
     second_button = None
 
-    function click sends its own coordinates
-        if first ==None:
+    click function sends its own coordinates
+        if first == None:
             first = coor
         else:
             second = coor
@@ -22,7 +22,7 @@
 
 3. backend:
 
-   * check_move(first, second) - gets the move the player want to make and check if it's valid (more function for every type)
+   * check_move(first, second) - gets the move the player wants to make and check if it's valid (more function for every type)
                               return some strings that will make frontend to decide how to react
 
        types of tests:

@@ -5,9 +5,9 @@ import pygame
 class BoardGui:
     def __init__(self, game_logic):
         """
-        Class for the chess board GUI
+        Class for the chessboard GUI
         Args:
-            game_logic - a GameLogic object
+            game_logic - GameLogic object
         """
         self.root = Tk()
         self.root.configure(bg="#444941", pady=10, padx=50)
@@ -53,7 +53,7 @@ class BoardGui:
     def board_setup(self):
         """
         Setting up the board as it should be in the beginning of the game.
-        Board is made of 64 buttons that are used as a slots
+        Board is made of 64 buttons that are used as slots
         """
 
         button_size = 70
@@ -96,10 +96,10 @@ class BoardGui:
         Updates the image of the buttons
         source button's image becomes empty and destination becomes the source image
         Args:
-            from_row - an int
-            from_col - an int
-            to_row - an int
-            to_col - an int
+            from_row - int
+            from_col - int
+            to_row - int
+            to_col - int
         """
         from_button = self.button_matrix[from_row][from_col]
         to_button = self.button_matrix[to_row][to_col]
@@ -109,7 +109,7 @@ class BoardGui:
 
     def board_promote(self):
         """
-        Promote solider that came to last row
+        Promote solider that arrived to last row
         """
         window = Toplevel(self.root)
         var = StringVar(window, "Queen")
@@ -129,10 +129,10 @@ class BoardGui:
         """
         Sends the source and destination clicks to the backends and gets back a move to make in the GUI
         Args:
-            row - an int
-            col - an int
+            row - int
+            col - int
         """
-        if self.first_click is None and self.game_logic.back_chess_board[row][col] is not None:
+        if self.first_click is None and self.game_logic.back_chessboard[row][col] is not None:
             self.first_click = (row, col)
         elif self.first_click is not None:
             self.second_click = (row, col)

@@ -19,6 +19,8 @@ class Pawn:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True if move is legal
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -30,7 +32,6 @@ class Pawn:
             else:
                 if from_col != to_col:
                     return False
-            # self.potential_en_passant = None
             if self.first_turn:
                 if self.color == "black":
                     if -2 <= from_row - to_row < 0:
@@ -64,6 +65,8 @@ class Rook:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True if move is legal
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -90,6 +93,8 @@ class Bishop:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True if move is legal
         """
         if from_square is not None and to_square is not None:
             form_row, from_col = from_square
@@ -116,6 +121,8 @@ class Knight:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True if move is legal
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
@@ -143,6 +150,8 @@ class Queen:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True
         """
         return True
 
@@ -164,6 +173,8 @@ class King:
             from_square - a tuple
             to_square - a tuple
             board - two-dimensional list
+        Returns:
+            bool: True if move is legal
         """
         if from_square is not None and to_square is not None:
             from_row, from_col = from_square
